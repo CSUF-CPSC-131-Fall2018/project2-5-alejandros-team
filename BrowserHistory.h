@@ -58,7 +58,7 @@ void BrowserHistory::readHistory(string fileName) {
 	}
 }
 BrowserHistory::BrowserHistory() {
-
+	//both lists have a def blank webpage in their list
 	navHistory.push_front(Webpage());
 	navPos = navHistory.begin();
 	sitesVisited.push_front(Webpage());
@@ -69,21 +69,22 @@ void BrowserHistory::visitSite(Webpage page) {
 	list<Webpage>::iterator temp;
 	temp = navPos;
 	temp++;
+	//checking to see if we need to delete the "foward" websites saved in browser history
 	if (temp != navHistory.end()) {
 		chop();
 	}
 	
-
+	//adding the website too both lists
 	sitesVisited.push_back(page);
 	navHistory.push_back(page);
-	
+	//making the iterator point to the newest visited websitre
 	navPos = navHistory.end();
 	navPos--;
 	numSites++;
 }
 string BrowserHistory::back() {
 	//going back 1 in the browserhistory
-	
+	//checking to see if possible
 	if (navPos == navHistory.begin()) {
 		ex = "error";
 		return ex;
@@ -94,9 +95,11 @@ string BrowserHistory::back() {
 }
 string BrowserHistory::forward() {
 	//going forward 1 in the navHistory
+
 	list<Webpage>::iterator temp;
 	temp = navHistory.end();
 	temp--;//temp is pointing to last webpage
+	//checking to see is iterator is at last webpage
 	if (navPos == temp) {
 		
 		ex = "error";
@@ -114,6 +117,7 @@ string BrowserHistory::getUrl() {
 	if (navPos != navHistory.end()) {
 		string def;
 		def = navPos->getUrl();
+		//For default blank webpage
 		if (def == "blank") {
 			ex = "error";
 			return ex;
@@ -125,11 +129,12 @@ string BrowserHistory::getUrl() {
 	return ex;
 }
 size_t BrowserHistory::getNavSize() {
+	//-1 because list has a default of 1 webpage
 	return navHistory.size() - 1;
 	//return numSites;
 }
 list<Webpage> BrowserHistory::getSitesVisited() {
-
+	//popping front becuase of default webpage in front of list
 	sitesVisited.pop_front();
 	return sitesVisited;
 }
@@ -138,5 +143,6 @@ void BrowserHistory::chop() {
 	//making a temp iterator, so I dont change the navPos
 	list<Webpage>::iterator temp;
 	temp = navPos;
+	//erasing from iterator + 1 to end of list
 	navHistory.erase(++temp, navHistory.end());
 }
