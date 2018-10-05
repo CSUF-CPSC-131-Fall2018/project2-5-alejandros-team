@@ -129,11 +129,8 @@ size_t BrowserHistory::getNavSize() {
 	//return numSites;
 }
 list<Webpage> BrowserHistory::getSitesVisited() {
-	/*list<Webpage>::iterator temp;
-	temp = navPos;
-	for (temp = sitesVisited.begin(); temp != sitesVisited.end(); temp++) {
-		cout << temp->getUrl();
-	}*/
+
+	sitesVisited.pop_front();
 	return sitesVisited;
 }
 
