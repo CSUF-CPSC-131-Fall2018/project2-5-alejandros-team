@@ -58,25 +58,25 @@ void BrowserHistory::readHistory(string fileName) {
 	}
 }
 BrowserHistory::BrowserHistory() {
-	//defaulting list navHistory with a node of def of Webpage
+
 	navHistory.push_front(Webpage());
-	//defaulting iterator navPos with the begining of the navHistory list
 	navPos = navHistory.begin();
 	sitesVisited.push_front(Webpage());
 	numSites = 0;
-
+	
 }
 void BrowserHistory::visitSite(Webpage page) {
 	list<Webpage>::iterator temp;
-	temp = navHistory.end();
-	temp--;
+	temp = navPos;
+	temp++;
+	if (temp != navHistory.end()) {
+		chop();
+	}
 	
 
 	sitesVisited.push_back(page);
 	navHistory.push_back(page);
-	if (navPos != temp) {
-		chop();
-	}
+	
 	navPos = navHistory.end();
 	navPos--;
 	numSites++;
@@ -102,20 +102,30 @@ string BrowserHistory::forward() {
 		ex = "error";
 		return ex;
 	}
-	return navPos->getUrl();
 	navPos++;
+	return navPos->getUrl();
+	//navPos++;
 	
 }
 string BrowserHistory::getUrl() {
 	//return url from webpage iterator pointer
+	//if statement to make sure navPos isnt pointing to nullptr
+	
 	if (navPos != navHistory.end()) {
-		return navPos->getUrl();
+		string def;
+		def = navPos->getUrl();
+		if (def == "blank") {
+			ex = "error";
+			return ex;
+		}
+		else return navPos->getUrl();
 	}
+	
 	ex = "error";
 	return ex;
 }
 size_t BrowserHistory::getNavSize() {
-	return navHistory.size();
+	return navHistory.size() - 1;
 	//return numSites;
 }
 list<Webpage> BrowserHistory::getSitesVisited() {
@@ -128,8 +138,8 @@ list<Webpage> BrowserHistory::getSitesVisited() {
 }
 
 void BrowserHistory::chop() {
+	//making a temp iterator, so I dont change the navPos
 	list<Webpage>::iterator temp;
 	temp = navPos;
 	navHistory.erase(++temp, navHistory.end());
-
 }
